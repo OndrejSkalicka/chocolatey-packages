@@ -1,9 +1,10 @@
 ﻿$ErrorActionPreference = 'Stop';
 
-$packageName= 'r-base'
-$toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://cran.r-project.org/bin/windows/base/R-3.3.2-win.exe'
-$url64      = $url
+$packageName = 'r-base'
+$version     = '3.3.2'
+$toolsDir    = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+$url         = "https://cran.r-project.org/bin/windows/base/R-$version-win.exe"
+$url64       = $url
 
 $packageArgs = @{
   packageName   = $packageName
@@ -24,3 +25,14 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+
+$installPath = (Get-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\SOFTWARE\R-core\R\$version).InstallPath
+Install-ChocolateyEnvironmentVariable "R_HOME" $installPath 
+
+if (Get-ProcessorBits 64) {
+  Install-ChocolateyPath "$installPath\bin\x64"
+} else {
+  Install-ChocolateyPath "$installPath\bin"
+}
+
+Update-SessionEnvironment
