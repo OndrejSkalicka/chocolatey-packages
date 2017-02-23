@@ -7,9 +7,9 @@ $url         = 'https://get.enterprisedb.com/postgresql/postgresql-9.6.2-1-windo
 $url64       = 'https://get.enterprisedb.com/postgresql/postgresql-9.6.2-1-windows-x64.exe'
 
 if (Get-ProcessorBits 64) {
-  $servicename = "postgrsql-x64-9.6"
+  $servicename = "postgresql-x64-9.6"
 } else {
-  $servicename = "postgrsql-9.6"
+  $servicename = "postgresql-9.6"
 }
 
 $packageArgs = @{

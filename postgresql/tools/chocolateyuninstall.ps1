@@ -14,28 +14,12 @@ $ErrorActionPreference = 'Stop'; # stop on all errors
 
 $packageName = 'postgresql'
 $softwareName = 'postgresql*' #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
-$installerType = 'MSI' 
-#$installerType = 'EXE' 
+#$installerType = 'MSI' 
+$installerType = 'EXE' 
 
-$silentArgs = '/qn /norestart'
-# https://msdn.microsoft.com/en-us/library/aa376931(v=vs.85).aspx
-$validExitCodes = @(0, 3010, 1605, 1614, 1641)
-if ($installerType -ne 'MSI') {
-  # The below is somewhat naive and built for EXE installers
-  # Uncomment matching EXE type (sorted by most to least common)
-  #$silentArgs = '/S'           # NSIS
-  #$silentArgs = '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' # Inno Setup
-  #$silentArgs = '/s'           # InstallShield
-  #$silentArgs = '/s /v"/qn"' # InstallShield with MSI
-  #$silentArgs = '/s'           # Wise InstallMaster
-  #$silentArgs = '-s'           # Squirrel
-  #$silentArgs = '-q'           # Install4j
-  #$silentArgs = '-s -u'        # Ghost
-  # Note that some installers, in addition to the silentArgs above, may also need assistance of AHK to achieve silence.
-  #$silentArgs = ''             # none; make silent with input macro script like AutoHotKey (AHK)
-                                #       https://chocolatey.org/packages/autohotkey.portable
-  $validExitCodes = @(0)
-}
+#$silentArgs = '/qn /norestart'
+$silentArgs = '--mode unattended'
+$validExitCodes = @(0)
 
 $uninstalled = $false
 # Get-UninstallRegistryKey is new to 0.9.10, if supporting 0.9.9.x and below,
@@ -48,18 +32,6 @@ $uninstalled = $false
 if ($key.Count -eq 1) {
   $key | % { 
     $file = "$($_.UninstallString)"
-
-    if ($installerType -eq 'MSI') {
-      # The Product Code GUID is all that should be passed for MSI, and very 
-      # FIRST, because it comes directly after /x, which is already set in the 
-      # Uninstall-ChocolateyPackage msiargs (facepalm).
-      $silentArgs = "$($_.PSChildName) $silentArgs"
-
-      # Don't pass anything for file, it is ignored for msi (facepalm number 2) 
-      # Alternatively if you need to pass a path to an msi, determine that and 
-      # use it instead of the above in silentArgs, still very first
-      $file = ''
-    }
 
     Uninstall-ChocolateyPackage -PackageName $packageName `
                                 -FileType $installerType `

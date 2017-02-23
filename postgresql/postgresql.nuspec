@@ -30,6 +30,23 @@
             types, including INTEGER, NUMERIC, BOOLEAN, CHAR, VARCHAR, DATE, INTERVAL, and TIMESTAMP. It also supports
             storage of binary large objects, including pictures, sounds, or video. It has native programming interfaces
             for C/C++, Java, .Net, Perl, Python, Ruby, Tcl, ODBC, among others, and exceptional documentation.
+
+            ### Notes
+
+            Installs into default C:\Program Files\PostgreSQL\9.6 directory with data in default C:\Program
+            Files\PostgreSQL\9.6\data .
+
+            Admin account is postgres / postgres . (password is not default -- it does not have default)
+
+            Automatically creates service postgresql-x64-9.6 or postgresql-9.6 (for x32) , under Network Service.
+
+            Sets locale to "English, United States".
+
+            ### Uninstall notes
+
+            Uninstaller keeps the data directory intact (that's where your databases reside), for complete
+            uninstallation you have to remove it manually.
+
         </description>
 
         <dependencies>
